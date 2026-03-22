@@ -1,40 +1,117 @@
 import { useState, useCallback } from "react";
 import "./styles/Work.css";
-import WorkImage from "./WorkImage";
-import { MdArrowBack, MdArrowForward } from "react-icons/md";
+import { MdArrowBack, MdArrowForward, MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 
 const projects = [
   {
-    title: "Solid Starters",
-    category: "Low-Code Platform",
-    tools: "Angular, Next.js, NestJS, MongoDB",
-    image: "/images/Solidx.png",
+    title: "Long-Form Edits",
+    type: "landscape",
+    videos: [
+      "/images/Videos/Long from edits 16,9/01 Long from edits.mp4",
+      "/images/Videos/Long from edits 16,9/02 Long from edits.mp4",
+      "/images/Videos/Long from edits 16,9/03 Long from edits.mp4"
+    ].sort((a, b) => a.localeCompare(b))
   },
   {
-    title: "Radix",
-    category: "E-Commerce",
-    tools: "Angular, Next.js, NestJS, CMS",
-    image: "/images/radix.png",
+    title: "Shorts & Reels",
+    type: "vertical",
+    videos: [
+      "/images/Videos/Shorts & Reels 9,16/01 Shorts & Reels.mp4",
+      "/images/Videos/Shorts & Reels 9,16/02 Shorts & Reels.mp4",
+      "/images/Videos/Shorts & Reels 9,16/03 Shorts & Reels.mp4",
+      "/images/Videos/Shorts & Reels 9,16/04 Shorts & Reels.mp4",
+      "/images/Videos/Shorts & Reels 9,16/05 Shorts & Reels.mp4",
+      "/images/Videos/Shorts & Reels 9,16/06 Shorts & Reels.mp4",
+      "/images/Videos/Shorts & Reels 9,16/07 Shorts & Reels.mp4"
+    ].sort((a, b) => a.localeCompare(b))
   },
   {
-    title: "Bond Cancellation",
-    category: "Import-Export Automation",
-    tools: "Angular, Next.js, NestJS, Workflows",
-    image: "/images/bond.png",
-  },
-  {
-    title: "Sapphire",
-    category: "CRM Platform",
-    tools: "AngularJS, NestJS, PostgreSQL",
-    image: "/images/sapphire.png",
-  },
-  {
-    title: "Mpro",
-    category: "Insurance Platform",
-    tools: "React.js, Node.js, Microservices",
-    image: "/images/Maxlife.png",
-  },
+    title: "Promo Videos",
+    type: "vertical",
+    videos: [
+      "/images/Videos/Promo Videos 4,6/01 Promo Videos.mp4",
+      "/images/Videos/Promo Videos 4,6/02 Promo Videos.mp4",
+      "/images/Videos/Promo Videos 4,6/03 Promo Videos.mp4",
+      "/images/Videos/Promo Videos 4,6/04 Promo Videos.mp4"
+    ].sort((a, b) => a.localeCompare(b))
+  }
 ];
+
+const ProjectVideos = ({ project }: { project: any }) => {
+  const [videoIndex, setVideoIndex] = useState(0);
+  if (!project.videos || project.videos.length === 0) return null;
+
+  const handleUp = () => {
+    setVideoIndex((prev) => (prev === 0 ? project.videos.length - 1 : prev - 1));
+  };
+  const handleDown = () => {
+    setVideoIndex((prev) => (prev === project.videos.length - 1 ? 0 : prev + 1));
+  };
+
+  const v1 = project.videos[videoIndex];
+  const v2 = project.videos[(videoIndex + 1) % project.videos.length];
+
+  const isLandscape = project.type === "landscape";
+
+  return (
+    <div style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      height: "100%", 
+      width: "100%", 
+      padding: "1.5rem",   /* p-6 */
+      gap: "2rem",         /* gap-8 */
+      boxSizing: "border-box" 
+    }}>
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: isLandscape ? 'column' : 'row', 
+        gap: '2rem',       /* gap-8 */
+        justifyContent: 'center',
+        alignItems: 'center',
+        maxWidth: isLandscape ? "32rem" : "40rem",  /* max-w-lg / xl */
+        maxHeight: "36rem",
+        flex: 1
+      }}>
+        <video 
+          src={v1} 
+          autoPlay loop muted playsInline 
+          style={{ 
+            width: isLandscape ? "100%" : "calc(50% - 1rem)", 
+            height: isLandscape ? "auto" : "100%", 
+            maxHeight: isLandscape ? "14rem" : "28rem",
+            objectFit: "cover", 
+            borderRadius: "1rem",  /* rounded-2xl */
+            boxShadow: "0 10px 15px -3px rgba(0,0,0,0.5), 0 4px 6px -4px rgba(0,0,0,0.5)", /* shadow-lg */
+          }} 
+        />
+        {project.videos.length > 1 && (
+          <video 
+            src={v2} 
+            autoPlay loop muted playsInline 
+            style={{ 
+              width: isLandscape ? "100%" : "calc(50% - 1rem)", 
+              height: isLandscape ? "auto" : "100%",
+              maxHeight: isLandscape ? "14rem" : "28rem",
+              objectFit: "cover", 
+              borderRadius: "1rem",  /* rounded-2xl */
+              boxShadow: "0 10px 15px -3px rgba(0,0,0,0.5), 0 4px 6px -4px rgba(0,0,0,0.5)" /* shadow-lg */
+            }} 
+          />
+        )}
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center' }}>
+        <button onClick={handleUp} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '50%', width: '3rem', height: '3rem', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff', fontSize: '1.5rem', backdropFilter: 'blur(10px)', transition: "all 0.2s" }}>
+          <MdKeyboardArrowUp />
+        </button>
+        <button onClick={handleDown} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '50%', width: '3rem', height: '3rem', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff', fontSize: '1.5rem', backdropFilter: 'blur(10px)', transition: "all 0.2s" }}>
+          <MdKeyboardArrowDown />
+        </button>
+      </div>
+    </div>
+  );
+};
 
 const Work = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -105,17 +182,10 @@ const Work = () => {
                       </div>
                       <div className="carousel-details">
                         <h4>{project.title}</h4>
-                        <p className="carousel-category">
-                          {project.category}
-                        </p>
-                        <div className="carousel-tools">
-                          <span className="tools-label">Tools & Features</span>
-                          <p>{project.tools}</p>
-                        </div>
                       </div>
                     </div>
                     <div className="carousel-image-wrapper">
-                      <WorkImage image={project.image} alt={project.title} />
+                      <ProjectVideos project={project} />
                     </div>
                   </div>
                 </div>
